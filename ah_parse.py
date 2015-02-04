@@ -1,6 +1,5 @@
 import requests
 import json
-import re
 import urllib.request
 import smtplib
 from email.mime.text import MIMEText
@@ -10,6 +9,12 @@ from email.mime.text import MIMEText
         ##   Functions       ##
         ##                   ##
 ################################################################################
+
+# todo
+# make users.txt a json file
+# search AH data in one pass
+# put items and users in a database
+
 
 ##### Get Auction Data#####
 def getAuctionData():
@@ -21,16 +26,29 @@ def getAuctionData():
     resp = requests.get(url)
     data = resp.json()
     url = data['files'][0]['url']
-
+    print(url)
     # Get the AH data dump JSON file
     resp = requests.get(url)
     data = resp.json()
     return data
 
+##### Parse users.txt #####
+def parseUsers():
+    users = []
+    userFile = open('users.txt','r')
+    for line in userFile:
+        userline = line.split(',')
+        userline[-1] = userline[-1].replace('\n','')
+        users.append(userline)
+    userFile.close()
+    print (users)
+    return users
+
 #####Change Item ID to Item Name#####
 def idToName(itemIDs):
     itemNames = []
     for i in range(len(itemIDs)):
+        # should change this to blizzard api call instead
         url = "http://www.wowdb.com/items/" + str(itemIDs[i])
         req = urllib.request.urlopen(url)
         finalurl = req.geturl()
@@ -48,9 +66,9 @@ def findItems(itemID, data):
     for j in range(len(itemID)):
         foundItem[j].append(itemID[j])
         for i in allAuctions:
-            if i['item'] == itemID[j]:
+            if i['item'] == int(itemID[j]):
+                # convert to gold per item
                 foundItem[j].append(i['buyout']/(i['quantity']*10000))
-
     # Sort so that ID is the first element, then the buyout prices are contained in a second array
     emailBody = ''
     for j in range(len(itemID)):
@@ -62,15 +80,12 @@ def findItems(itemID, data):
     return emailBody
 
 #####Send Email#####
-def sendEmail(foundItem):
+def sendEmail(foundItem, email):
     msg = MIMEText(foundItem)
 
-    msg['Subject'] = 'Test message'
     msg['From'] = 'crens.lightbringer.ah.mailer@gmail.com'
-    msg['To'] = 'crens.lightbringer.ah.mailer@gmail.com'
+    msg['To'] = email
 
-    # Send the message via our own SMTP server, but don't include the
-    # envelope header.
     s = smtplib.SMTP('smtp.gmail.com:587')
     s.starttls()
     s.login('crens.lightbringer.ah.mailer', '#finddatitemdawg')
@@ -84,12 +99,15 @@ def sendEmail(foundItem):
         ##                   ##
 ################################################################################
 
-# vvv Change itemIDs here to change what the script looks up vvv
-itemID = [118874,118882,118876]
-# ^^^ Change itemIDs here to change what the script looks up ^^^
 auctionData = getAuctionData()
-itemName = idToName(itemID)
-emailBody = findItems(itemID, auctionData)
-sendEmail(emailBody)
+# Parse users.txt
+# Loop for every user
+users = parseUsers()
+for user in users:   
+    email = user[0]
+    itemID = user[1:]
+    itemName = idToName(itemID)
+    emailBody = findItems(itemID, auctionData)
+    sendEmail(emailBody, email)
 
 
