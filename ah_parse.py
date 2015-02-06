@@ -88,7 +88,7 @@ def sendEmail(foundItem, email):
 
     s = smtplib.SMTP('smtp.gmail.com:587')
     s.starttls()
-    s.login('crens.lightbringer.ah.mailer', '#finddatitemdawg')
+    s.login('crens.lightbringer.ah.mailer', 'heylookaplaintextpasswordAHHHHHHH')
     s.sendmail(msg['From'], msg['To'], foundItem)
     s.quit()
 
