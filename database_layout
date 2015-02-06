@@ -1,0 +1,23 @@
+Tables
+
+Users
+  email(varchar(45), PK)
+  joinDate(date)
+  
+Items
+  itemID(int, PK)
+  itemName(varchar(45))
+  
+Realms
+  realm(varchar(45), PK)
+  locale(varchar(2), PK)
+  isConnected(char)
+  
+Orders
+  id(int, auto_increment, PK)
+  email(foreign, varchar(45), refernces users.email)
+  itemID(foreign, int, references items.itemID)
+  realm(foreign, varchar(45), refernces realms.realm)
+  locale(foriegn, varchar(2), references realms.locale)
+  operator(varchar(2))
+  price(int)
