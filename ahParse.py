@@ -1,13 +1,12 @@
-
-
-
-# what do i want this program to do
-# i want to load the orders table into a dictionary
-# i want to search the ah json for all the unique items in orders
-    # and put those in a list
-# i want to look through unique auctions and pull out those that match criteria
-# i want to match those auctions up to their email addresses
-# i want to email those auctions to those users
+# split order data into realms
+# split realm data into orders per user
+# for each realm
+    # get realm auction dump from blizzard
+    # find unique items in realm orders
+    # find all instances of unique items from realm orders in auction data
+    # for each user on realm
+        # find matching orders
+        # create and send email with items that match conditions
 
 def getOrders(conn):
     c = conn.cursor(pymysql.cursors.DictCursor)
