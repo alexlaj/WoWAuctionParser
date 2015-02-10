@@ -3,6 +3,7 @@ import requests
 import json
 import urllib.request
 import smtplib
+import time
 from email.mime.text import MIMEText
 
 connection = pymysql.connect(host='192.168.1.73', port=3306, user='pythonuser', passwd='pypyaccessingtehdb', db='auction_parser_dev')
@@ -17,6 +18,7 @@ connection = pymysql.connect(host='192.168.1.73', port=3306, user='pythonuser', 
 c = connection.cursor(pymysql.cursors.DictCursor)
 
 data = {118874: [[60000.0, 60000.0, 1], [70000.0, 70000.0, 1]], 118892: [[40309.6457, 40309.6457, 1], [35000.0, 35000.0, 1]], 32837: [], 32838: []}
+'''
 msg = {}
 msg['Message'] = 'Item name | ItemID\n[Price per item, Buyout price, Quantity]\n\n'
 
@@ -39,7 +41,10 @@ server.ehlo()
 server.starttls()
 server.login(msg['From'], '#finddatitemdawg')
 server.sendmail(msg['From'], msg['To'], message)
-
+'''
+while True:
+    print (data)
+    time.sleep(2)
 c.close()
 connection.commit()
 connection.close()
