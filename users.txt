@@ -1,2 +1,15 @@
 crens.lightbringer.ah.mailer@gmail.com,118874,118882,118876,109145
 alexlajwow@gmail.com,118892,118896
+
+'''
+c.execute("SELECT * FROM orders")
+c.execute("INSERT INTO orders (id, email, realm, locale, itemID, operator, price) VALUES (1, 'test@test.com', 'Lightbringer', 'na', 32837, 'le', 5000)")
+c.execute("INSERT INTO orders (id, email, realm, locale, itemID, operator, price) VALUES (2, 'test@test.com', 'Lightbringer', 'na', 32838, 'le', 5000)")
+c.execute("INSERT INTO orders (id, email, realm, locale, itemID, operator, price) VALUES (3, 'test@test.com', 'Lightbringer', 'na', 118874, 'le', 5000)")
+c.execute("INSERT INTO orders (id, email, realm, locale, itemID, operator, price) VALUES (4, 'tester@test.com', 'Lightbringer', 'na', 118874, 'le', 5000)")
+c.execute("INSERT INTO orders (id, email, realm, locale, itemID, operator, price) VALUES (5, 'tester@test.com', 'Lightbringer', 'eu', 118876, 'le', 5000)")
+c.execute("INSERT INTO orders (id, email, realm, locale, itemID, operator, price) VALUES (6, 'testmon@test.com', 'Lightbringer', 'eu', 118892, 'le', 5000)")
+c.execute("INSERT INTO orders (id, email, realm, locale, itemID, operator, price) VALUES (7, 'testmon@test.com', 'Lightbringer', 'eu', 32837, 'le', 5000)")
+c.execute("INSERT INTO orders (id, email, realm, locale, itemID, operator, price) VALUES (8, 'testmon@test.com', 'Lightbringer', 'eu', 118874, 'le', 5000)")
+c.execute("INSERT INTO orders (id, email, realm, locale, itemID, operator, price) VALUES (9, 'testmon@test.com', 'Lightbringer', 'eu', 118876, 'le', 5000)")
+'''
