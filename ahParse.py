@@ -1,8 +1,8 @@
 import pymysql
-import requests
 import urllib.request
 import smtplib
-import time
+from requests import get
+from time import sleep
 from email.mime.text import MIMEText
 # For printing output with special characters in it
 import sys
@@ -28,11 +28,11 @@ def getOrders(c, locale):
 # Get auction data from blizzard for realm in locale
 def getAuctionData(locale, realm):
     url = "http://" + locale + ".battle.net/api/wow/auction/data/" + realm
-    resp = requests.get(url)
+    resp = get(url)
     data = resp.json()
     url = data['files'][0]['url']
 
-    resp = requests.get(url)
+    resp = get(url)
     data = resp.json()
     return data
 # Find all instances of itemIDs in the auction data
@@ -43,8 +43,7 @@ def findItems(itemID, data):
     allAuctions = data['auctions']['auctions']
     for i in allAuctions:
         if i['item'] in itemID:
-            fItems[i['item']].append([i['buyout']/(i['quantity']*10000),i['buyout']/10000,i['quantity']])
-     
+            fItems[i['item']].append([i['buyout']/(i['quantity']*10000),i['buyout']/10000,i['quantity']])     
     return fItems
 # Send email, also include item names    
 def sendeMail(data, to, server):
@@ -53,7 +52,7 @@ def sendeMail(data, to, server):
     for i in data:
         # Maybe also include a link to the item later
         url = "http://us.battle.net/api/wow/item/" + str(i)
-        resp = requests.get(url)
+        resp = get(url)
         itemName = resp.json()
         msg['Message'] = msg['Message'] + itemName['name'] + " | " + str(i) + "\n" + str(data[i]) + "\n\n"
         
@@ -95,4 +94,4 @@ while True:
         sys.stdout.flush()
         sendeMail(fItems, mailUser, server)
         
-    time.sleep(20)
+    sleep(20)
