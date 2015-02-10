@@ -16,30 +16,29 @@ connection = pymysql.connect(host='192.168.1.73', port=3306, user='pythonuser', 
 
 c = connection.cursor(pymysql.cursors.DictCursor)
 
-data = [[32837, [-1]], [32838, [[-1]]], [118874, [[40000.0, 40000.0, 1]]], [118892, [[21000.0, 21000.0, 1], [34000.0, 34000.0, 1], [36500.0, 36500.0, 1], [36630.0, 36630.0, 1], [38025.0, 38025.0, 1], [39000.0, 39000.0, 1], [40000.0, 40000.0, 1]]]]
+data = {118874: [[60000.0, 60000.0, 1], [70000.0, 70000.0, 1]], 118892: [[40309.6457, 40309.6457, 1], [35000.0, 35000.0, 1]], 32837: [], 32838: []}
 msg = {}
-msg['Message'] = ''
+msg['Message'] = 'Item name | ItemID\n[Price per item, Buyout price, Quantity]\n\n'
+
 for i in data:
-    url = "http://www.wowdb.com/items/" + str(i[0])
+    url = "http://www.wowdb.com/items/" + str(i)
     req = urllib.request.urlopen(url)
     finalurl = req.geturl()
     finalurl = finalurl.replace("http://www.wowdb.com/items/", "")
-    finalurl = finalurl.replace(str(i[0])+"-", "")
+    finalurl = finalurl.replace(str(i)+"-", "")
     finalurl = finalurl.replace("?cookieTest=1", "")
     finalurl = finalurl.replace("-", " ")
-    msg['Message'] = msg['Message'] + finalurl + " " + str(i) + "\n"
-
-
+    msg['Message'] = msg['Message'] + finalurl + " | " + str(i) + "\n" + str(data[i]) + "\n\n"
     
 msg['Subject'] = 'Items found!'
 msg['From'] = 'crens.lightbringer.ah.mailer@gmail.com'
 msg['To'] = 'alexlajwow@gmail.com'
-
-server = smtplib.SMTP("smtp.gmail.com", 587) #or port 465 doesn't seem to work!
+message = 'Subject: %s\n%s' % (msg['Subject'], msg['Message'])
+server = smtplib.SMTP("smtp.gmail.com", 587)
 server.ehlo()
 server.starttls()
 server.login(msg['From'], '#finddatitemdawg')
-server.sendmail(msg['From'], msg['To'], msg['Message'])
+server.sendmail(msg['From'], msg['To'], message)
 
 c.close()
 connection.commit()

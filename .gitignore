@@ -3,10 +3,11 @@ Thumbs.db
 ehthumbs.db
 
 # Mah Stuff
-learn_db.py
+db_learn.py
 ah_parse.py
 websitelayout.png
 users.txt
+logins
 
 # Folder config file
 Desktop.ini
@@ -47,3 +48,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+logins
+db_learn.py
+db_learn.py
