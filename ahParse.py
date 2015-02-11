@@ -19,11 +19,12 @@ if sys.stderr.encoding != 'cp850':
 def getOrders(c, locale):
     c.execute("SELECT * FROM realms WHERE locale='"+locale+"'")
     data = c.fetchall()
-    orders = []
+    orders = {}
     for i in data:
+        orders[i['realm']] = []
         c.execute("SELECT email, locale, itemID, operator, price FROM orders WHERE realm='"+i['realm']+"' AND locale='na'")
         d = c.fetchall()
-        orders.append([i['realm'],d])
+        orders[i['realm']].append(d)
     return orders
 # Get auction data from blizzard for realm in locale
 def getAuctionData(locale, realm):
@@ -54,6 +55,7 @@ def sendeMail(data, to, server):
         url = "http://us.battle.net/api/wow/item/" + str(i)
         resp = get(url)
         itemName = resp.json()
+        print(i)
         msg['Message'] = msg['Message'] + itemName['name'] + " | " + str(i) + "\n" + str(data[i]) + "\n\n"
         
     msg['Subject'] = 'Items found!'
@@ -62,9 +64,10 @@ def sendeMail(data, to, server):
     message = 'Subject: %s\n%s' % (msg['Subject'], msg['Message'])
     
     server.sendmail(msg['From'], msg['To'], message)
-    
+   
 ################################################################################                  
 # Main program
+
 while True:
     # Need to change to json file
     f = open('logins').read().splitlines() 
@@ -83,15 +86,37 @@ while True:
     # Just get North American orders for now (blizzard uses us instead of na)
     naOrders = getOrders(c, 'na')
     for i in naOrders:
-        aData = getAuctionData('us', i[0])
-        c.execute("SELECT DISTINCT itemID FROM orders WHERE realm='"+i[0]+"' AND locale='na'")
+        aData = getAuctionData('us', i)
+        c.execute("SELECT DISTINCT itemID FROM orders WHERE realm='"+i+"' AND locale='na'")
         uItems = c.fetchall()
         uItems2 = []
         for j in uItems:
             uItems2.append(j['itemID'])
         fItems = findItems(uItems2, aData)
-        print(fItems)
-        sys.stdout.flush()
-        sendeMail(fItems, mailUser, server)
-        
-    sleep(20)
+        userData =  naOrders[i][0]
+        naUsers = {}
+        # Prep dictionary for users
+        for j in userData:
+            naUsers[j['email']] = []
+        # email: {[itemID, operator, price], [itemID, operator, price], ...}    
+        for j in userData:
+            naUsers[j['email']].append([j['itemID'], j['operator'], j['price']])
+        # For every user in naUsers
+        # where the user is email: {[itemID, operator, price], [itemID, operator, price], ...}                   
+        for j in naUsers:
+            emailItems = {}
+            # For each item that user wants            
+            for k in naUsers[j]:
+                emailItems[k[0]] = []
+                # Check if it's in the found items
+                for l in fItems[k[0]]:
+                    # If found and price is low enough append the price tuple                    
+                    if int(l[0]) <= int(k[2]):
+                        emailItems[k[0]].append(l)
+            # For each user, email to inform found items            
+            for k in emailItems:
+                # But only if there are found items
+                if bool(emailItems[k]):
+                    sendeMail(emailItems, mailUser, server)                                     
+        sys.stdout.flush()   
+    sleep(30*60)

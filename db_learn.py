@@ -42,6 +42,18 @@ server.starttls()
 server.login(msg['From'], '#finddatitemdawg')
 server.sendmail(msg['From'], msg['To'], message)
 '''
+
+                if k[0] in fItems:
+                    print("k2: ",fItems[k[0]])
+                    print()
+                    emailItems[k[0]] = []
+                    for l in fItems[k[0]]:
+                        print(l)
+                        price = int(fItems[k[0]][0][0])
+                        if price <= int(k[2]):                            
+                            emailItems[k[0]].append(fItems[k[0]])
+
+
 while True:
     print (data)
     time.sleep(2)
