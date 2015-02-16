@@ -5,3 +5,4 @@ In users table, remove email as PK and use something else so that user can chang
 Fill items table with itemName so that ahParse doesn't have to do API calls to get it
 Set up Django and get started on front end. Move to EC2 first?
 Add more test users/orders with realm email addresses.
+Add error checking to ahparse.py
