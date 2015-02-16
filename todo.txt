@@ -1,0 +1,6 @@
+Unordered things to do.
+
+Move to EC2 instance?
+In users table, remove email as PK and use something else so that user can change email address later.
+Fill items table with itemName so that ahParse doesn't have to do API calls to get it
+Set up Django and get started on front end. Move to EC2 first?
