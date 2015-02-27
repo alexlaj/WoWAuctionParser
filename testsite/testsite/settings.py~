@@ -1,5 +1,5 @@
 """
-Django settings for mysite project.
+Django settings for testsite project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'di%=f+&le)vo&(4o=q^%ip*p6t4r_i!*t^b)d9x=akt$36*6$9'
+SECRET_KEY = '(rk4(!v-7(=dw-_-u2#21mg1&qg_hvs6!56vw$4hi2j6bo&t6d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,9 +48,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'mysite.urls'
+ROOT_URLCONF = 'testsite.urls'
 
-WSGI_APPLICATION = 'mysite.wsgi.application'
+WSGI_APPLICATION = 'testsite.wsgi.application'
 
 
 # Database
@@ -61,7 +61,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'auction_parser_dev',
         'USER': 'pythonuser',
-        'PASSWORD': 'pypyaccessingtehdb'
+        'PASSWORD': 'pypyaccessingtehdb',
     }
 }
 
@@ -70,7 +70,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'PST'
+TIME_ZONE = 'Canada/Pacific'
 
 USE_I18N = True
 
