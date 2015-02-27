@@ -9,7 +9,6 @@ settings.py
 websitelayout.png
 users.txt
 logins
-*.py~
 
 # Folder config file
 Desktop.ini
